@@ -1,5 +1,5 @@
 <?php
-function calcularINSS($salary){
+function calcularINSS($salary = 0){
   $calculo = 0;
 
   if ($salary <= 1302) {
@@ -18,10 +18,10 @@ function calcularINSS($salary){
     $calculo = 877.24;
   }
 
-  return round($calculo, 2);
+  return $calculo;
 }
 
-function calcularIRRF($salary, $dependente = 0) {
+function calcularIRRF($salary = 0, $dependente = 0) {
   $ir = 0;
   $inss = calcularINSS($salary);
   $base = $salary - $inss - ($dependente * 189.59);
@@ -44,6 +44,6 @@ function calcularIRRF($salary, $dependente = 0) {
       break;
   }
 
-  return round($ir, 2);
+  return $ir;
 }
 ?>
