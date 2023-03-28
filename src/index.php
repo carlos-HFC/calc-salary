@@ -17,15 +17,15 @@
   </div>
 
   <div class="container d-flex flex-column align-items-center justify-content-center p-5">
-    <form class="col-6 mb-5">
+    <form class="col-6 mb-5" method="POST">
       <div class="row mb-5">
         <label for="salary" class="form-label">Salário Bruto</label>
-        <input type="number" class="form-control" id="salary" name="salary" />
+        <input type="number" class="form-control" id="salary" name="salary" value="0" min="0" />
       </div>
 
       <div class="row mb-5">
         <label for="dependentes" class="form-label">Número de dependentes</label>
-        <input type="number" class="form-control" id="dependentes" name="dependentes" />
+        <input type="number" class="form-control" id="dependentes" name="dependentes" value="0" min="0" />
       </div>
 
       <div class="row gap-2 justify-content-center">
@@ -38,30 +38,52 @@
       </div>
     </form>
 
-    <div>
-      <h2 class="mb-3">Resultado:</h2>
+    <?php 
+    include "functions.php";
 
-      <div class="row">
-        <p>
-          <strong>INSS:</strong>
-          R$1200,00
-        </p>
-      </div>
+    if (isset($_POST['salary']) && isset($_POST['dependentes'])) {
+      $salary = $_POST['salary'];
+      $dependentes = $_POST['dependentes'];
 
-      <div class="row">
-        <p>
-          <strong>IRRF:</strong>
-          R$1200,00
-        </p>
-      </div>
+      $inss = calcularINSS($salary);
+      $irrf = calcularIRRF($salary);
+      $liquido = round($salary, 2) - calcularINSS($salary) - calcularIRRF($salary, $dependentes);
 
-      <div class="row">
-        <p>
-          <strong>Salário Líquido:</strong>
-          R$1200,00
-        </p>
+      echo '
+      <div>
+        <h2 class="mb-3">Resultado do cálculo:</h2>
+
+        <div class="row">
+          <p>
+            <strong>Seu salário bruto:</strong>
+            R$ ' . number_format($salary, 2, ',', '.') . '
+          </p>
+        </div>
+
+        <div class="row">
+          <p>
+            <strong>INSS:</strong>
+            R$ ' . number_format($inss, 2, ',', '.') . '
+          </p>
+        </div>
+
+        <div class="row">
+          <p>
+            <strong>IRRF:</strong>
+            R$ ' . number_format($irrf, 2, ',', '.') . '
+          </p>
+        </div>
+
+        <div class="row">
+          <p>
+            <strong>Salário Líquido:</strong>
+            R$ ' . number_format($liquido, 2, ',', '.') . '
+          </p>
+        </div>
       </div>
-    </div>
+    ';
+    }
+    ?>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
