@@ -19,13 +19,21 @@
   <div class="container d-flex flex-column align-items-center justify-content-center p-5">
     <form class="col-6 mb-5" method="POST">
       <div class="row mb-5">
-        <label for="salary" class="form-label">Salário Bruto</label>
-        <input type="number" class="form-control" id="salary" name="salary" value="0" min="0" />
+        <div class="col">
+          <label for="salary" class="form-label">Salário Bruto</label>
+          <input type="number" class="form-control" id="salary" name="salary" value="0" min="0" />
+        </div>
       </div>
 
       <div class="row mb-5">
-        <label for="dependentes" class="form-label">Número de dependentes</label>
-        <input type="number" class="form-control" id="dependentes" name="dependentes" value="0" min="0" />
+        <div class="col">
+          <label for="dependentes" class="form-label">Número de dependentes</label>
+          <input type="number" class="form-control" id="dependentes" name="dependentes" value="0" min="0" />
+        </div>
+        <div class="col">
+          <label for="assist" class="form-label">Assistência médica</label>
+          <input type="number" class="form-control" id="assist" name="assist" value="0" min="0" max="250" />
+        </div>
       </div>
 
       <div class="row gap-2 justify-content-center">
@@ -41,13 +49,14 @@
     <?php 
     include "functions.php";
 
-    if (isset($_POST['salary']) && isset($_POST['dependentes'])) {
+    if (isset($_POST['salary']) && isset($_POST['dependentes']) && isset($_POST['assist'])) {
       $salary = $_POST['salary'];
       $dependentes = $_POST['dependentes'];
+      $assist = $_POST['assist'];
 
       $inss = calcularINSS($salary);
-      $irrf = calcularIRRF($salary);
-      $liquido = round($salary, 2) - calcularINSS($salary) - calcularIRRF($salary, $dependentes);
+      $irrf = calcularIRRF($salary, $dependentes);
+      $liquido = $salary - $inss - $irrf - $assist;
 
       echo '
       <div>
@@ -71,6 +80,13 @@
           <p>
             <strong>IRRF:</strong>
             R$ ' . number_format($irrf, 2, ',', '.') . '
+          </p>
+        </div>
+
+        <div class="row">
+          <p>
+            <strong>Assitência médica:</strong>
+            R$ ' . number_format($assist, 2, ',', '.') . '
           </p>
         </div>
 
